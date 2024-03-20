@@ -1,55 +1,55 @@
-#include <stdio.h>
-#include <string.h>
+#include<stdio.h>
 
-void caesarCipher(char message[], int key) 
-{
-    int i;
-    char ch;
+#include<ctype.h>
 
-    for (i = 0; message[i] != '\0'; ++i) 
-	{
-        ch = message[i];
+int main() {
 
-        if (ch >= 'A' && ch <= 'Z') 
-		{
-            ch = ch + key;
+    char text[500], ch;
 
-            if (ch > 'Z') 
-			{
-                ch = ch - 'Z' + 'A' - 1;
+    int key;
+
+    // Taking user input.
+    printf("Enter a message to encrypt: ");
+
+    scanf("%s", text);
+
+    printf("Enter the key: ");
+
+    scanf("%d", & key);
+
+    // Visiting character by character.
+
+    for (int i = 0; text[i] != '\0'; ++i) {
+
+        ch = text[i];
+        // Check for valid characters.
+        if (isalnum(ch)) {
+
+            //Lowercase characters.
+            if (islower(ch)) {
+                ch = (ch - 'a' + key) % 26 + 'a';
+            }
+            // Uppercase characters.
+            if (isupper(ch)) {
+                ch = (ch - 'A' + key) % 26 + 'A';
             }
 
-            message[i] = ch;
-        } else if (ch >= 'a' && ch <= 'z') 
-		{
-            ch = ch + key;
-
-            if (ch > 'z') 
-			{
-                ch = ch - 'z' + 'a' - 1;
+            // Numbers.
+            if (isdigit(ch)) {
+                ch = (ch - '0' + key) % 10 + '0';
             }
-
-            message[i] = ch;
         }
-    }
-}
+        // Invalid character.
+        else {
+            printf("Invalid Message");
+        }
 
-int main() 
-{
-    char message[100];
-    int i;
+        // Adding encoded answer.
+        text[i] = ch;
 
-    printf("Enter a message: ");
-    fgets(message, sizeof(message), stdin);
-    message[strcspn(message, "\n")] = '\0';
-    for (i = 1; i <= 25; ++i) 
-	{
-        printf("Key %d: ", i);
-        caesarCipher(message, i);
-        printf("%s\n", message);
-        strcpy(message, "YourOriginalMessage");
     }
+
+    printf("Encrypted message: %s", text);
 
     return 0;
 }
-
